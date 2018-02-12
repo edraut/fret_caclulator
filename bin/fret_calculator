@@ -35,8 +35,10 @@ def to_sixty_fourths(bd)
 end
 
 def print_fret_positions
+  puts "Fret Distances at #{@scale_length.to_s('F')} Scale Length"
+  puts
   @fret_positions.each do |bd|
-    puts "#{bd.round(3).to_s('F')}\t#{to_sixty_fourths(bd)}"
+    puts "#{bd.round(3).to_s('F')}\t\t#{to_sixty_fourths(bd)}"
   end
 end
 
