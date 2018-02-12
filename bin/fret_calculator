@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'bigdecimal'
+
+FACTOR = BigDecimal.new('17.817152')
+NUMBER_OF_FRETS = 21
+
+OptionParser.new do |parser|
+  parser.on("-s", "--scale-length SCALE_LENGTH",
+            "calculate fret positions from nut for SCALE_LENGTH") do |scale_length|
+    @scale_length = BigDecimal.new(scale_length)
+  end
+end.parse!
+
+def setup
+  @fret_positions = []
+  @last_fret_to_nut = 0
+  @last_fret_to_scale = @scale_length
+end
+
+def calculate_fret_positions
+  NUMBER_OF_FRETS.times do |i|
+    next_fret_from_last = @last_fret_to_scale / FACTOR
+    @last_fret_to_nut = @last_fret_to_nut + next_fret_from_last
+    @last_fret_to_scale = @scale_length - @last_fret_to_nut
+    @fret_positions << @last_fret_to_nut
+  end
+end
+
+def to_sixty_fourths(bd)
+  whole_num = bd.truncate
+  thousandths = bd - whole_num
+  sixty_fourths = thousandths * BigDecimal.new("64")
+  "#{whole_num} #{sixty_fourths.round(1).to_s('F')}/64"
+end
+
+def print_fret_positions
+  @fret_positions.each do |bd|
+    puts "#{bd.round(3).to_s('F')}\t#{to_sixty_fourths(bd)}"
+  end
+end
+
+def main
+  setup
+  calculate_fret_positions
+  print_fret_positions
+end
+
+main
