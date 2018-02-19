@@ -31,14 +31,14 @@ def to_sixty_fourths(bd)
   whole_num = bd.truncate
   thousandths = bd - whole_num
   sixty_fourths = thousandths * BigDecimal.new("64")
-  "#{whole_num} #{sixty_fourths.round(1).to_s('F')}/64"
+  "#{whole_num} #{sixty_fourths.round.to_s}/64"
 end
 
 def print_fret_positions
   puts "Fret Distances at #{@scale_length.to_s('F')} Scale Length"
   puts
   @fret_positions.each do |bd|
-    puts "#{bd.round(3).to_s('F')}\t\t#{to_sixty_fourths(bd)}"
+    puts "#{bd.round(2).to_s('F')}\t\t#{to_sixty_fourths(bd)}"
   end
 end
 
